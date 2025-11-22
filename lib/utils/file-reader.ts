@@ -37,7 +37,7 @@ const readDirectory = async (dirPath: string): Promise<TSXFile[]> => {
       return readDirectory(fullPath);
     }
 
-    if (entry.isFile() && entry.name.endsWith('.tsx')) {
+    if (entry.isFile() && entry.name.endsWith('.ts')) {
       return readTSXFile(fullPath);
     }
 
@@ -57,7 +57,7 @@ export async function readFiles(inputPath: string): Promise<TSXFile[]> {
 
   const stats = await fs.stat(inputPath);
 
-  if (stats.isFile() && inputPath.endsWith(".tsx")) {
+  if (stats.isFile() && inputPath.endsWith(".ts")) {
     return [await readTSXFile(inputPath)];
   }
 

@@ -5,7 +5,7 @@ export function parseAST(file: TSXFile) {
   const ast = parse(file.content, {
     sourceType: "module",
     sourceFilename: file.path,
-    plugins: ["jsx", "typescript", "decorators"]
+    plugins: ["jsx", "typescript", "decorators-legacy", "classProperties"],
   });
 
   return ast;

@@ -4,12 +4,11 @@ import { readFiles } from "./utils/file-reader";
 import { parseAST } from "./utils/parser";
 import { SourceLocation, TSXFile } from "./types";
 
-import { anyType } from "./smells/any-type";
-import { enumImplicitValues } from "./smells/enum-implicit-values";
-import { missingUnionTypeAbstraction } from "./smells/missing-union-type-abstraction";
-import { multipleBooleansForState } from "./smells/multiple-booleans-for-state";
-import { nonNullAssertions } from "./smells/non-null-assertions";
-import { overlyFlexibleProps } from "./smells/overly-flexible-props";
+import { directDomManipulation } from "./detectors/direct-dom-manipulation";
+import { inheritanceInsteadOfCompositionDetector } from "./detectors/inheritance-instead-of-composition";
+import { largeComponent } from "./detectors/large-component";
+import { overusingAnyType } from "./detectors/overusing-any-type";
+import { tooManyInputs } from "./detectors/too-many-inputs";
 
 export type AnalysisOutput = {
   [key: string]: {
@@ -27,12 +26,11 @@ export const analyzeFile = (file: TSXFile): AnalysisOutput => {
   const ast = parseAST(file);
 
   const analyzers: Analyzers = {
-    missingUnionTypeAbstraction,
-    multipleBooleansForState,
-    anyType,
-    enumImplicitValues: (ast) => enumImplicitValues(ast, file.path),
-    nonNullAssertions,
-    overlyFlexibleProps
+    directDomManipulation,
+    inheritanceInsteadOfCompositionDetector,
+    largeComponent,
+    overusingAnyType,
+    tooManyInputs
   };
 
   return {

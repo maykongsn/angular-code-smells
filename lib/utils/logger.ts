@@ -2,20 +2,18 @@ import path from "path";
 import { AnalysisOutput } from "../analyzer";
 
 type SmellAbbreviation =
+  | "DOM"
+  | "IIC"
+  | "LC"
   | "ANY"
-  | "EIV"
-  | "MUT"
-  | "MBS"
-  | "NNA"
-  | "OFP"
+  | "TMI"
 
 const smellsMap: Record<string, SmellAbbreviation> = {
-  anyType: "ANY",
-  enumImplicitValues: "EIV",
-  missingUnionTypeAbstraction: "MUT",
-  multipleBooleansForState: "MBS",
-  nonNullAssertions: "NNA",
-  overlyFlexibleProps: "OFP"
+  overusingAnyType: "ANY",
+  inheritanceInsteadOfCompositionDetector: "IIC",
+  largeComponent: "LC",
+  directDomManipulation: "DOM",
+  tooManyInputs: "TMI",
 }
 
 type SmellAnalysis = {
@@ -36,9 +34,7 @@ export const logger = (analyzeOutput: AnalysisOutput[]) => {
     const analysisData: SmellAnalysis = Object.fromEntries(
       Object.entries(smells).map(([key, value]) => [
         smellsMap[key],
-        (smellsMap[key] === "MUT" || smellsMap[key] === "MBS")
-          ? (Array.isArray(value) && value.length > 0 ? 'Y' : 'N')
-          : (Array.isArray(value) && value.length > 0 ? 1 : 0),
+        (Array.isArray(value) && value.length > 0 ? 1 : 0),
       ])
     );
 
