@@ -1,9 +1,11 @@
-import { ParseResult } from "@babel/parser";
-import { File } from "@babel/types";
 import traverse from "@babel/traverse";
 import { SourceLocation } from "../types";
+import { AnalyzerParams } from "../analyzer";
 
-export const directDomManipulation = (ast: ParseResult<File>) => {
+export const directDomManipulation = (params: AnalyzerParams): SourceLocation[] => {
+  if (!params.ast) return [];
+  
+  const { ast } = params;
   const domAccesses: SourceLocation[] = [];
 
   traverse(ast, {

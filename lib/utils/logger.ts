@@ -1,4 +1,3 @@
-import path from "path";
 import { AnalysisOutput } from "../analyzer";
 
 type SmellAbbreviation =
@@ -7,13 +6,17 @@ type SmellAbbreviation =
   | "LC"
   | "ANY"
   | "TMI"
+  | "LF"
+  | "EPC"
 
 const smellsMap: Record<string, SmellAbbreviation> = {
   overusingAnyType: "ANY",
-  inheritanceInsteadOfCompositionDetector: "IIC",
+  inheritanceInsteadOfComposition: "IIC",
   largeComponent: "LC",
   directDomManipulation: "DOM",
   tooManyInputs: "TMI",
+  largeFile: "LF",
+  excessiveParentToChild: "EPC"
 }
 
 type SmellAnalysis = {
@@ -39,7 +42,7 @@ export const logger = (analyzeOutput: AnalysisOutput[]) => {
     );
 
     const outputEntry: LoggerOutput = {
-      file: path.basename(pathToFile),
+      file: pathToFile,
       ...analysisData
     }
 

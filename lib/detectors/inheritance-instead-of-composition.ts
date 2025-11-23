@@ -3,10 +3,14 @@ import { File } from "@babel/types";
 import traverse from "@babel/traverse";
 import * as t from "@babel/types";
 import { SourceLocation } from "../types";
+import { AnalyzerParams } from "../analyzer";
 
-export const inheritanceInsteadOfCompositionDetector = (
-  ast: ParseResult<File>
+export const inheritanceInsteadOfComposition = (
+  params: AnalyzerParams
 ): SourceLocation[] => {
+  if (!params.ast) return [];
+
+  const { ast } = params;
   const locations: SourceLocation[] = [];
 
   traverse(ast as any, {
@@ -25,8 +29,6 @@ export const inheritanceInsteadOfCompositionDetector = (
       });
 
       if (!isAngularComponent) return;
-
-      console.log(node.superClass)
 
       if (node.superClass && t.isIdentifier(node.superClass)) {
         const superName = node.superClass.name;

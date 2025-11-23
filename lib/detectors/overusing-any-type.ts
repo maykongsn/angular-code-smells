@@ -1,11 +1,14 @@
-import { ParseResult } from "@babel/parser";
-import { File, isTSAnyKeyword } from "@babel/types";
+import { isTSAnyKeyword } from "@babel/types";
 import traverse from "@babel/traverse";
 import { SourceLocation } from "../types";
+import { AnalyzerParams } from "../analyzer";
 
 const ANY_THRESHOLD = 5;
 
-export const overusingAnyType = (ast: ParseResult<File>) => {
+export const overusingAnyType = (params: AnalyzerParams): SourceLocation[] => {
+  if (!params.ast) return [];
+
+  const { ast } = params;
   const anyOccurrences: SourceLocation[] = [];
 
   traverse(ast, {

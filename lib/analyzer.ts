@@ -5,10 +5,14 @@ import { parseAST } from "./utils/parser";
 import { SourceLocation, TSXFile } from "./types";
 
 import { directDomManipulation } from "./detectors/direct-dom-manipulation";
-import { inheritanceInsteadOfCompositionDetector } from "./detectors/inheritance-instead-of-composition";
+import { 
+  inheritanceInsteadOfComposition
+} from "./detectors/inheritance-instead-of-composition";
 import { largeComponent } from "./detectors/large-component";
 import { overusingAnyType } from "./detectors/overusing-any-type";
 import { tooManyInputs } from "./detectors/too-many-inputs";
+import { largeFile } from "./detectors/large-file";
+import { excessiveParentToChild } from "./detectors/excessive-parent-to-child-communication";
 
 export type AnalysisOutput = {
   [key: string]: {
@@ -16,7 +20,12 @@ export type AnalysisOutput = {
   }
 }
 
-export type AnalyzerFunction<T> = (ast: ParseResult<File>) => T;
+export type AnalyzerParams = {
+  ast: ParseResult<File> | null;
+  file: TSXFile;
+};
+
+export type AnalyzerFunction<T> = (params: AnalyzerParams) => T;
 
 type Analyzers = {
   [key: string]: AnalyzerFunction<SourceLocation[]>;
@@ -25,17 +34,27 @@ type Analyzers = {
 export const analyzeFile = (file: TSXFile): AnalysisOutput => {
   const ast = parseAST(file);
 
+  const params: AnalyzerParams = {
+    ast,
+    file
+  };
+
   const analyzers: Analyzers = {
     directDomManipulation,
-    inheritanceInsteadOfCompositionDetector,
+    inheritanceInsteadOfComposition,
     largeComponent,
     overusingAnyType,
-    tooManyInputs
+    tooManyInputs,
+    largeFile,
+    excessiveParentToChild
   };
 
   return {
     [file.path]: Object.fromEntries(
-      Object.entries(analyzers).map(([key, analyzer]) => [key, analyzer(ast)])
+      Object.entries(analyzers).map(([key, analyzer]) => [
+        key,
+        analyzer(params)
+      ])
     )
   };
 };

@@ -1,16 +1,18 @@
-import { ParseResult } from "@babel/parser";
 import {
-  File,
-  isClassDeclaration,
   isDecorator,
   isClassProperty,
 } from "@babel/types";
 import traverse from "@babel/traverse";
 import { SourceLocation } from "../types";
+import { AnalyzerParams } from "../analyzer";
 
-const INPUT_THRESHOLD = 13;
+export const tooManyInputs = (
+  params: AnalyzerParams, 
+  threshold: number = 13
+): SourceLocation[] => {
+  if (!params.ast) return [];
 
-export const tooManyInputs = (ast: ParseResult<File>) => {
+  const { ast } = params;
   const tooMany: SourceLocation[] = [];
 
   traverse(ast, {
@@ -46,7 +48,7 @@ export const tooManyInputs = (ast: ParseResult<File>) => {
         }
       });
 
-      if (inputCount > INPUT_THRESHOLD) {
+      if (inputCount > threshold) {
         tooMany.push({
           start: node.loc?.start.line,
           end: node.loc?.end.line,

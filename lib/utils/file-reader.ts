@@ -11,7 +11,7 @@ type LineRange = {
   endLine: number
 };
 
-export const readTSXFile = async (
+export const readFile = async (
   filePath: string,
   range?: LineRange
 ): Promise<TSXFile> => {
@@ -37,8 +37,8 @@ const readDirectory = async (dirPath: string): Promise<TSXFile[]> => {
       return readDirectory(fullPath);
     }
 
-    if (entry.isFile() && entry.name.endsWith('.ts')) {
-      return readTSXFile(fullPath);
+    if (entry.isFile() && (entry.name.endsWith(".ts") || entry.name.endsWith(".html"))) {
+      return readFile(fullPath);
     }
 
     return [];
@@ -57,8 +57,8 @@ export async function readFiles(inputPath: string): Promise<TSXFile[]> {
 
   const stats = await fs.stat(inputPath);
 
-  if (stats.isFile() && inputPath.endsWith(".ts")) {
-    return [await readTSXFile(inputPath)];
+  if (stats.isFile() && (inputPath.endsWith(".ts") || inputPath.endsWith(".html"))) {
+    return [await readFile(inputPath)];
   }
 
   if (stats.isDirectory()) {
