@@ -3,9 +3,10 @@ import traverse from "@babel/traverse";
 import { SourceLocation } from "../types";
 import { AnalyzerParams } from "../analyzer";
 
-const ANY_THRESHOLD = 5;
-
-export const overusingAnyType = (params: AnalyzerParams): SourceLocation[] => {
+export const overusingAnyType = (
+  params: AnalyzerParams, 
+  threshold: number = 2
+): SourceLocation[] => {
   if (!params.ast) return [];
 
   const { ast } = params;
@@ -23,7 +24,7 @@ export const overusingAnyType = (params: AnalyzerParams): SourceLocation[] => {
     },
   });
 
-  if (anyOccurrences.length > ANY_THRESHOLD) {
+  if (anyOccurrences.length > threshold) {
     return anyOccurrences;
   }
 

@@ -1,4 +1,5 @@
 import { AnalysisOutput } from "../analyzer";
+import path from "path";
 
 type SmellAbbreviation =
   | "DOM"
@@ -42,7 +43,7 @@ export const logger = (analyzeOutput: AnalysisOutput[]) => {
     );
 
     const outputEntry: LoggerOutput = {
-      file: pathToFile,
+      file: path.relative(process.cwd(), pathToFile),
       ...analysisData
     }
 

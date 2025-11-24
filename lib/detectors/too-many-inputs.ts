@@ -8,7 +8,7 @@ import { AnalyzerParams } from "../analyzer";
 
 export const tooManyInputs = (
   params: AnalyzerParams, 
-  threshold: number = 13
+  threshold: number = 8
 ): SourceLocation[] => {
   if (!params.ast) return [];
 

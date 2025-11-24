@@ -10,7 +10,7 @@ import fs from "fs";
 
 export const largeComponent = (
   params: AnalyzerParams,
-  threshold: number = 240
+  threshold: number = 140
 ): SourceLocation[] => {
   if (!params.ast) return [];
 

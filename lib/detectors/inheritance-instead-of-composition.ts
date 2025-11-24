@@ -1,5 +1,3 @@
-import { ParseResult } from "@babel/parser";
-import { File } from "@babel/types";
 import traverse from "@babel/traverse";
 import * as t from "@babel/types";
 import { SourceLocation } from "../types";

@@ -54,7 +54,7 @@ export const excessiveParentToChild = (
     },
   });
 
-  if (results.length > threshold) return results;
+  if (results.length >= threshold) return results;
 
   return [];
 };
